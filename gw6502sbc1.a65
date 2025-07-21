@@ -14,17 +14,17 @@
 ;selected. This is handled before entry to EhBASIC.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-        .include "ehbasic.a65"
+	.include "ehbasic.a65"
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Hardware Equates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-ACIABASE        = $EF00         ;6551 ACIA base address
-DATREG          = ACIABASE
-RESET           = ACIABASE + 1
-STATREG         = ACIABASE + 1
-CMDREG          = ACIABASE + 2
-CTLREG          = ACIABASE + 3
+ACIABASE	= $EF00		;6551 ACIA base address
+DATREG		= ACIABASE
+RESET		= ACIABASE+1
+STATREG		= ACIABASE+1
+CMDREG		= ACIABASE+2
+CTLREG		= ACIABASE+3
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;IRQ and NMI Vectors
@@ -32,18 +32,18 @@ CTLREG          = ACIABASE + 3
 ;The following RAM locations are pointed to by the ROM
 ;bootloader vectors at the top of memory.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-VECBASE         = $EEF0         ;Use 16 bytes below I/O page
-IRQLO           = VECBASE       ;IRQ handler pointer
-IRQHI           = VECBASE+1
-NMILO           = VECBASE+2     ;NMI handler pointer
-NMIHI           = VECBASE+3
+VECBASE		= $EEF0		;Use 16 bytes below I/O page
+IRQLO		= VECBASE	;IRQ handler pointer
+IRQHI		= VECBASE+1
+NMILO		= VECBASE+2	;NMI handler pointer
+NMIHI		= VECBASE+3
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;GWMON-65 Equates
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-GWMON           = $FD00         ;GWMON cold start entry point
-GWARM           = GWMON+3       ;GWMON warm start entry point
-COUT            = GWMON+6       ;GWMON COUT entry point
+GWMON		= $FD00		;GWMON cold start entry point
+GWARM		= GWMON+3	;GWMON warm start entry point
+COUT		= GWMON+6	;GWMON COUT entry point
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;EhBASIC IRQ and NMI Routine Space
@@ -53,8 +53,8 @@ COUT            = GWMON+6       ;GWMON COUT entry point
 ;0x14 bytes after IRQ_vec, so the combined routines must not
 ;exceed 20 bytes.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-IRQ_vec         = VEC_SV+2      ; IRQ code vector address
-NMI_vec         = IRQ_vec+$0A   ; NMI code vector address
+IRQ_vec		= VEC_SV+2	; IRQ code vector address
+NMI_vec		= IRQ_vec+$0A	; NMI code vector address
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;RES_vec -- EhBASIC cold start routine
@@ -64,9 +64,9 @@ NMI_vec         = IRQ_vec+$0A   ; NMI code vector address
 ;Falls through to SETVEC.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 RES_vec:
-        CLD                     ;Clear decimal mode
-        LDX     #$FF            ;Reset stack pointer
-        TXS
+	CLD			;Clear decimal mode
+	LDX	#$FF		;Reset stack pointer
+	TXS
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;SETVEC -- Set up the EhBASIC customization vectors
@@ -79,26 +79,26 @@ RES_vec:
 ;
 ;Exits by cold starting EhBASIC.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-SETVEC: LDY     #ENDPRG-VECTRS  ;Y =index/count into VECTRS
-SETVE1: LDA     VECTRS-1,Y      ;Get byte from VECTRS structure
-        STA     VEC_IN-1,Y      ;Save to RAM
-        DEY                     ;Decrement index/count
-        BNE     SETVE1          ;Loop if more to do
+SETVEC:	LDY	#ENDPRG-VECTRS	;Y =index/count into VECTRS
+SETVE1:	LDA	VECTRS-1,Y	;Get byte from VECTRS structure
+	STA	VEC_IN-1,Y	;Save to RAM
+	DEY			;Decrement index/count
+	BNE	SETVE1		;Loop if more to do
 
-        LDA     #<IRQ_vec       ;Change bootstrap IRQ to EhBASIC
-        STA     IRQLO
-        LDA     #>IRQ_vec
-        STA     IRQHI
+	LDA	#<IRQ_vec	;Change bootstrap IRQ to EhBASIC
+	STA	IRQLO
+	LDA	#>IRQ_vec
+	STA	IRQHI
 
-        LDA     #<NMI_vec       ;Change bootstrap NMI to EhBASIC
-        STA     NMILO
-        LDA     #>NMI_vec
-        STA     NMIHI
+	LDA	#<NMI_vec	;Change bootstrap NMI to EhBASIC
+	STA	NMILO
+	LDA	#>NMI_vec
+	STA	NMIHI
 
-        JMP     LAB_COLD        ;EhBASIC cold start
+	JMP	LAB_COLD	;EhBASIC cold start
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;SCRout  -- Output char in A register to console
+;SCRout -- Output char in A register to console
 ;
 ;Uses GWMON-65 character output routine, which works around 
 ;the WDC 6551 ACIA TDRE flag bug.
@@ -109,7 +109,7 @@ SETVE1: LDA     VECTRS-1,Y      ;Get byte from VECTRS structure
 ;post: character in A printed to console
 ;post: A register preserved
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-SCRout: JMP     COUT            ; GWMON character out routine
+SCRout:	JMP	COUT		;GWMON character out routine
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;KBDin -- Get a character from the console
@@ -127,14 +127,14 @@ SCRout: JMP     COUT            ; GWMON character out routine
 ;post: CY set if character available, clear if no char
 ;post: A register contains received character if available
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-KBDin:  LDA     STATREG         ;See if we got an incoming char
-        AND     #$08            ;Test RDRE bit
-        BNE     KBDin1          ;Got character
-        CLC                     ;Indicate no keypress
-        RTS
-KBDin1: LDA     DATREG          ;Get character from ACIA
-        SEC                     ;Indicate keypress
-        RTS
+KBDin:	LDA	STATREG		;See if we got an incoming char
+	AND	#$08		;Test RDRE bit
+	BNE	KBDin1		;Got character
+	CLC			;Indicate no keypress
+	RTS
+KBDin1:	LDA	DATREG		;Get character from ACIA
+	SEC			;Indicate keypress
+	RTS
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;GWload -- LOAD routine for 6502 SBC rev 1
@@ -146,17 +146,17 @@ GWload:
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;GWsave -- SAVE routine for 6502 SBC rev 1
 ;
-;SAVE is not currently supported, so we  print a message and
+;SAVE is not currently supported, so we print a message and
 ;return.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-GWsave: LDY     #0              ;Set up Y for string print       
-GWsav1: LDA     NOTSUP,Y        ;Get byte from sign on message
-        BEQ     GWsav2          ;Exit loop if done
+GWsave:	LDY	#0		;Set up Y for string print
+GWsav1:	LDA	NOTSUP,Y	;Get byte from sign on message
+	BEQ	GWsav2		;Exit loop if done
 
-        JSR     V_OUTP          ;Output character
-        INY                     ;Increment index
-        BNE     GWsav1          ;Loop, branch always
-GWsav2: RTS
+	JSR	V_OUTP		;Output character
+	INY			;Increment index
+	BNE	GWsav1		;Loop, branch always
+GWsav2:	RTS
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;Vector Tables
@@ -164,10 +164,10 @@ GWsav2: RTS
 ;The vector table will be patched into EhBASIC in page 2, it
 ;must be followed by the IRQ and NMI handlers.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-VECTRS: .word   KBDin           ;Byte in from keyboard
-        .word   SCRout          ;Byte out to screen
-        .word   GWload          ;Load vector for EhBASIC
-        .word   GWsave          ;Save vector for EhBASIC
+VECTRS:	.word	KBDin		;Byte in from keyboard
+	.word	SCRout		;Byte out to screen
+	.word	GWload		;Load vector for EhBASIC
+	.word	GWsave		;Save vector for EhBASIC
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;EhBASIC IRQ support
@@ -175,13 +175,13 @@ VECTRS: .word   KBDin           ;Byte in from keyboard
 ;This routine gets copied into RAM at IRQ_vec. It and the
 ;NMIHND routine must not exceed 20 bytes.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-IRQHND: PHA                     ;Save A
-        LDA     IrqBase         ;Get the IRQ flag byte
-        LSR                     ;Shift the set b7 to b6, and on down ...
-        ORA     IrqBase         ;OR the original back in
-        STA     IrqBase         ;Save the new IRQ flag byte
-        PLA                     ;Restore A
-        RTI
+IRQHND:	PHA			;Save A
+	LDA	IrqBase		;Get the IRQ flag byte
+	LSR			;Shift the set b7 to b6, and on down ...
+	ORA	IrqBase		;OR the original back in
+	STA	IrqBase		;Save the new IRQ flag byte
+	PLA			;Restore A
+	RTI
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;EhBASIC NMI support
@@ -189,14 +189,14 @@ IRQHND: PHA                     ;Save A
 ;This routine gets copied into RAM at NMI_vec. It and the
 ;IRQHND routine must not exceed 20 bytes.
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-NMIHND: PHA                     ;Save A
-        LDA     NmiBase         ;Get the NMI flag byte
-        LSR                     ;Shift the set b7 to b6, and on down ...
-        ORA     NmiBase         ;OR the original back in
-        STA     NmiBase         ;Save the new NMI flag byte
-        PLA                     ;Restore A
-        RTI
+NMIHND:	PHA			;Save A
+	LDA	NmiBase		;Get the NMI flag byte
+	LSR			;Shift the set b7 to b6, and on down ...
+	ORA	NmiBase		;OR the original back in
+	STA	NmiBase		;Save the new NMI flag byte
+	PLA			;Restore A
+	RTI
 
-ENDPRG                          ;End of program, strings follow
+ENDPRG:				;End of program, strings follow
 
-NOTSUP: .byte   "NOT SUPPORTED", $0D, $0A, $00
+NOTSUP:	.byte	"NOT SUPPORTED", $0D, $0A, $00
