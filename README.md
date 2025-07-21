@@ -3,9 +3,6 @@ EhBASIC for Glitch Works Projects
 
 **E**n**h**anced **BASIC** is a rework of Microsoft 6502 BASIC by Lee Davidson, which is often used in open source hardware projects. It is well documented, and fairly easy to customized. This repository contains customizations for [Glitch Works](http://www.glitchwrks.com) projects. It is based on [Jeff Tranter's CA65 compatible version](https://github.com/jefftranter/6502/tree/master/asm/ehbasic) of Lee Davidson's work.
 
-Available Customizations
-------------------------
-
 Building EhBASIC
 ----------------
 
