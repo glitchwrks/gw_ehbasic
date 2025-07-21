@@ -6,7 +6,7 @@ EhBASIC for Glitch Works Projects
 Building EhBASIC
 ----------------
 
-Typing `make` will build all EhBASIC customizations. Many convert into Intel HEX format or other loadable formats. This project uses the assembler from the [CC65 package](https://cc65.github.io/).
+Typing `make` will build all EhBASIC customizations. Many convert into Intel HEX format or other loadable formats. This project uses the assembler from the [CC65 package](https://cc65.github.io/). Builds that result in a HEX file require [SRecord](https://github.com/sierrafoxtrot/srecord).
 
 License and Original README.TXT
 -------------------------------
