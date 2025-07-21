@@ -1,0 +1,5 @@
+# Ignore CA65/LD65 outputs
+*.bin
+*.hex
+*.lst
+*.o
